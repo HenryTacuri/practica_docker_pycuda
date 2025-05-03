@@ -10,6 +10,7 @@ const inputFile = document.getElementById('imagen');
 const uploadedImage = document.getElementById('uploadedImage');
 const imageResult = document.getElementById('imageResult');
 
+const tamanio = document.getElementById('tamanio');
 const tiempo = document.getElementById('tiempo');
 const mascara = document.getElementById('mascara');
 const bloques = document.getElementById('bloques');
@@ -33,6 +34,8 @@ inputFile.addEventListener('change', function() {
       //Vizualizamos la imagen subida
       uploadedImage.src = 'data:image/png;base64,' + data.image;
       uploadedImage.style.display = 'block';
+      localStorage.setItem('ancho', data.ancho);
+      localStorage.setItem('alto', data.alto);
   })
   .catch(error => {
       console.error('Error:', error);
@@ -60,7 +63,8 @@ function procesarDatos() {
     .then(data => {
         imageResult.src = 'data:image/png;base64,' + data.image;
         imageResult.style.display = 'block';
-
+        
+        tamanio.innerHTML = '<strong>Tamaño de la imagen:</strong> ' + data.ancho + 'x' + data.alto;
         tiempo.innerHTML = '<strong>Tiempo de procesamiento:</strong> ' + parseFloat(data.tiempo).toFixed(2) + ' ms';
         mascara.innerHTML = '<strong>Máscara:</strong> ' + data.mascara + 'x' + data.mascara;
         bloques.innerHTML = '<strong>Bloques:</strong> ' + data.bloques;

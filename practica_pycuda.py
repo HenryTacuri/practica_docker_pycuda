@@ -64,6 +64,8 @@ def procesar_imagen():
     imagenGrises = Image.fromarray(imageNumpy).convert("L")
     imagenGrises = np.array(imagenGrises)
 
+    alto, ancho = imageNumpy.shape[:2]
+
     print("Tipo de filtro: ", tipoFiltro)
 
     if tipoFiltro == "filtroGaussiano":
@@ -81,13 +83,15 @@ def procesar_imagen():
 
         imagen_final, bloques, hilos, duration = filtro_log(mascara, imagenGrises)
         
-
+    
     return jsonify({
         'image': imagen_final,
         'mascara': mascara,
         'bloques': bloques,
         'hilos': hilos,
-        'tiempo': duration
+        'tiempo': duration,
+        'alto':alto, 
+        'ancho':ancho
     }), 200
 
 def filtro_log(mascara, imagenGrises):
