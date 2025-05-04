@@ -34,8 +34,6 @@ inputFile.addEventListener('change', function() {
       //Vizualizamos la imagen subida
       uploadedImage.src = 'data:image/png;base64,' + data.image;
       uploadedImage.style.display = 'block';
-      localStorage.setItem('ancho', data.ancho);
-      localStorage.setItem('alto', data.alto);
   })
   .catch(error => {
       console.error('Error:', error);
