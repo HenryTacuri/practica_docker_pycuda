@@ -91,9 +91,8 @@ def filtro_log_cuda(mascara, image):
         cuda.memcpy_htod(d_kernel, kernel_flat)
 
         # Definimos el grid y el bloque
-        block = (16, 16, 1)
-        grid = ((width + block[0] - 1) // block[0],
-                (height + block[1] - 1) // block[1], 1)
+        block_size = (16, 16, 1)
+        grid_size = ((width + 15) // 16, (height + 15) // 16)
 
         startY = 0
         endY = height
@@ -107,7 +106,7 @@ def filtro_log_cuda(mascara, image):
             d_kernel, np.int32(mascara), np.int32(mascara),
             np.int32(k_center), np.int32(k_center),
             np.int32(startY), np.int32(endY),
-            block=block, grid=grid
+            block=block_size, grid=grid_size
         )
 
         cuda.Context.synchronize()
@@ -120,11 +119,9 @@ def filtro_log_cuda(mascara, image):
 
         print(f"Tiempo de ejecución: {duration * 1000:.2f} ms\n")
         
-        bloques = 16
-        hilos = 16
         duration = duration * 1000
         
-        return output_image, bloques, hilos, duration
+        return output_image, grid_size, block_size, duration
 
     finally:
         d_input.free()
